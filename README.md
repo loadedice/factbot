@@ -1,7 +1,7 @@
 factbot
 =======
 
-Random facts, stright from Wikipedia!
+Random facts, straight from Wikipedia!
 
 ###Usage & Example Output
 ```
