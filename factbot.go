@@ -22,12 +22,14 @@ func DownloadURL(url string) string { //This function is taken from "Go-scrape"
 }
 
 func deHTML(html string) string { //When/if I get this to work, i will make it another program. There is already a program called dehtml, but I haven't looked at how it works
-	return html
+	//I might use some regex here just for a quick solution and then use go.net/html later.
+	re := regexp.MustCompile("<.*?>")
+	return re.ReplaceAllString(html, "")
 }
 
 func main() {
 	URL := "https://en.wikipedia.org/w/api.php?format=json&action=query&generator=random&prop=extracts&grnnamespace=0"
 	wikipediaRaw := DownloadURL(URL)
 	re := regexp.MustCompile(`(\"extract\"\:\")(.*?\.)`) //TODO: Parse this properly, without regular expressions. While it works for most of the cases I don't want to find one where it doesn't. And hey, it's JSON so yeah
-	fmt.Printf("%s\n", re.FindStringSubmatch(wikipediaRaw)[2])
+	fmt.Printf("%s\n", deHTML(re.FindStringSubmatch(wikipediaRaw)[2]))
 }
