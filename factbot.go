@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"html"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -45,5 +46,15 @@ func main() {
 	wikipediaRaw := DownloadURL(URL)
 	re := regexp.MustCompile(`(\"extract\"\:\")(.*?\.)`)
 	//TODO: Parse this properly, without regular expressions. While it works for most of the cases I don't want to find one where it doesn't. And hey, it's JSON so yeah
-	fmt.Printf("%s\n", deHTML(re.FindStringSubmatch(wikipediaRaw)[2]))
+	fact := html.UnescapeString(deHTML(re.FindStringSubmatch(wikipediaRaw)[2]))
+	for {
+		if len([]rune(fact)) > 10 {
+			fmt.Printf("%s\n", fact)
+			break //yea, I need to use the proper syntax rather than this cheap hack
+		} else {
+			verboseLog(*verbose, "Fact was shorter than 10 runes. Will attempt to get another fact")
+			//it actually doesn't... Yet... so we'll break
+			break
+		}
+	}
 }
